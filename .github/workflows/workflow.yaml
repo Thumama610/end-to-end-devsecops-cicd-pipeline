@@ -1,0 +1,168 @@
+name: workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven' 
+
+      - name: Compile code with Maven
+        run: mvn compile 
+
+  test:
+    name: test
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: test code with Maven
+        run: mvn test
+  
+  security-scan:
+    name: security-scan
+    runs-on: ubuntu-24.04
+    needs: test
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      
+      - name: Run Trivy vulnerability scanner in fs mode
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          trivy-config: trivy.yaml
+
+  code-quality:
+    name: code-quality
+    runs-on: ubuntu-24.04
+    needs: security-scan
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # Caches Maven dependencies for faster subsequent builds
+          cache: 'maven'
+      
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Thumama610_end-to-end-devsecops-cicd-pipeline
+
+   
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v2
+        with:
+          projectKey: Thumama610_end-to-end-devsecops-cicd-pipeline
+          projectName: end-to-end-devsecops-cicd-pipeline
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-and-upload-artifact:
+    name: build-and-upload-artifact
+    runs-on: ubuntu-24.04
+    needs: code-quality
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # Caches Maven dependencies for faster subsequent builds
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml # Command to build the project and create the artifact
+
+      - name: Upload file to Nexus
+        uses: lfit/nexus-upload-action@v1.4.1 # Use the specific action and version
+        with:
+          url: ${{ secrets.NEXUS_SERVER_URL }}
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
+          path: . 
+          ext: jar
+
+  docker-build-scan-push:
+    name: build-and-upload-artifact
+    runs-on: ubuntu-24.04
+    needs: build-and-upload-artifact
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          tags: thumama610/maven-app:${{ github.sha }}
+          push: false
+
+      - name: Run Trivy scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: thumama610/maven-app:${{ github.sha }}
+          format: table
+      #    exit-code: 1
+      #    severity: CRITICAL,HIGH
+       
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          tags: thumama610/maven-app:${{ github.sha }}
+          push: true
+        
+

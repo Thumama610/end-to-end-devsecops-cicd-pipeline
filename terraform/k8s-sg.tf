@@ -1,22 +1,7 @@
-resource "aws_instance" "worker2-server" {
-  ami                    = "ami-0b6c6ebed2801a5cb"      
-  instance_type          = "t3.medium"
-  key_name               = "private-key"             
-  vpc_security_group_ids = [aws_security_group.worker2-server-sg.id]
-  user_data              = templatefile("./install.sh", {})
-
-  tags = {
-    Name = "worker2-server"
-  }
-
-  root_block_device {
-    volume_size = 8
-  }
-}
-
-resource "aws_security_group" "worker2-server-sg" {
-  name        = "worker2-server-sg"
+resource "aws_security_group" "k8s-servers-sg" {
+  name        = "k8s-servers-sg"
   description = "Allow TLS inbound traffic"
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port   = 3000
@@ -85,6 +70,6 @@ resource "aws_security_group" "worker2-server-sg" {
   }
 
   tags = {
-    Name = "worker2-server-sg"
+    Name = "k8s-servers-sg"
   }
 }

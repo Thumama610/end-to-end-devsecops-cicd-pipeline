@@ -3,7 +3,9 @@ resource "aws_instance" "nexus-server" {
   instance_type          = "t3.xlarge"
   key_name               = "private-key"             
   vpc_security_group_ids = [aws_security_group.nexus-server-sg.id]
-  user_data              = templatefile("./install.sh", {})
+  user_data              = templatefile("./install-nexus.sh", {})
+  subnet_id              = data.aws_subnet.default_az.id
+  associate_public_ip_address = true
 
   tags = {
     Name = "nexus-server"
@@ -17,6 +19,7 @@ resource "aws_instance" "nexus-server" {
 resource "aws_security_group" "nexus-server-sg" {
   name        = "nexus-server-sg"
   description = "Allow TLS inbound traffic"
+  vpc_id      = data.aws_vpc.default.id
 
   ingress = [
     for port in [22, 80, 443, 8081] : {

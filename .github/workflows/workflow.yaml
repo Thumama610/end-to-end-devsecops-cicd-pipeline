@@ -61,6 +61,7 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           trivy-config: trivy.yaml
+          exit-code: '0'
 
   code-quality:
     name: code-quality

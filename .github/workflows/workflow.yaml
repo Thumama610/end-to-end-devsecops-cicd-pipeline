@@ -114,13 +114,18 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml # Command to build the project and create the artifact
 
+      - name: test jar file
+        run: |
+          ls
+          ls target/
+
       - name: Upload file to Nexus
         uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
         with:
           serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
-          repository: maven-releases      
+          repository: maven-snapshots      
           format: maven          
           coordinates: groupId=com.javaproject artifactId=database_service_project version=0.0.5-SNAPSHOT packaging=jar  
           assets: target/*.jar  

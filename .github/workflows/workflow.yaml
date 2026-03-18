@@ -125,7 +125,7 @@ jobs:
           serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
-          #repository: maven-snapshots      
+          repository: maven-snapshots      
           format: maven          
           coordinates: groupId=com.javaproject artifactId=database_service_project version=0.0.5-SNAPSHOT packaging=jar  
           assets: target/database_service_project-0.0.5-SNAPSHOT.jar 

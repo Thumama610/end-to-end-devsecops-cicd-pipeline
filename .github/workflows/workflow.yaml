@@ -115,13 +115,12 @@ jobs:
         run: mvn -B clean package --file pom.xml # Command to build the project and create the artifact
 
       - name: Upload file to Nexus
-        uses: lfit/nexus-upload-action@v1.4.1 # Use the specific action and version
+        uses: sonatype-nexus-community/nexus-repo-github-action@v1
         with:
           url: ${{ secrets.NEXUS_SERVER_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
-          path: . 
-          ext: jar
+          file: target/*.jar
 
   docker-build-scan-push:
     name: docker-build-scan-push

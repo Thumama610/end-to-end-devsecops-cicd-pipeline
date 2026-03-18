@@ -57,11 +57,12 @@ jobs:
       
       - name: Run Trivy vulnerability scanner in fs mode
         uses: aquasecurity/trivy-action@0.33.1
+        continue-on-error: true
         with:
           scan-type: 'fs'
           scan-ref: '.'
           trivy-config: trivy.yaml
-          exit-code: '0'
+          
 
   code-quality:
     name: code-quality

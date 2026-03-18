@@ -95,15 +95,6 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Thumama610_end-to-end-devsecops-cicd-pipeline
 
-   
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          projectKey: Thumama610_end-to-end-devsecops-cicd-pipeline
-          projectName: end-to-end-devsecops-cicd-pipeline
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
   build-and-upload-artifact:
     name: build-and-upload-artifact
     runs-on: ubuntu-24.04

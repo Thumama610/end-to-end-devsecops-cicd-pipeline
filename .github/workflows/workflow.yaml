@@ -115,7 +115,7 @@ jobs:
         run: mvn -B clean package --file pom.xml # Command to build the project and create the artifact
 
       - name: Upload file to Nexus
-        uses: sonatype-nexus-community/nexus-repo-github-action@v1
+        uses: sonatype-nexus-community/nexus-repo-github-action@main
         with:
           url: ${{ secrets.NEXUS_SERVER_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}

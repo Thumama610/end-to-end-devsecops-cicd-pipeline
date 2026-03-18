@@ -117,10 +117,12 @@ jobs:
       - name: Upload file to Nexus
         uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
         with:
-          url: ${{ secrets.NEXUS_SERVER_URL }}
+          serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
-          file: target/*.jar
+          repository: maven-releases      
+          format: maven            
+          assets: target/*.jar  
 
   docker-build-scan-push:
     name: docker-build-scan-push

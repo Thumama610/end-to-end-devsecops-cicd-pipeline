@@ -121,7 +121,8 @@ jobs:
           username: ${{ secrets.NEXUS_USERNAME }}
           password: ${{ secrets.NEXUS_PASSWORD }}
           repository: maven-releases      
-          format: maven            
+          format: maven          
+          coordinates: groupId=com.javaproject artifactId=database_service_project version=0.0.5-SNAPSHOT packaging=jar  
           assets: target/*.jar  
 
   docker-build-scan-push:

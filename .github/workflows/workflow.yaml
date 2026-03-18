@@ -128,7 +128,7 @@ jobs:
           repository: maven-snapshots      
           format: maven          
           coordinates: groupId=com.javaproject artifactId=database_service_project version=0.0.5-SNAPSHOT packaging=jar  
-          assets: target/database_service_project-0.0.5-SNAPSHOT 
+          assets: target/database_service_project-0.0.5-SNAPSHOT.jar 
 
   docker-build-scan-push:
     name: docker-build-scan-push

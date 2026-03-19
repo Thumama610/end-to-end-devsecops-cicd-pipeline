@@ -119,16 +119,11 @@ jobs:
           ls
           ls target/
 
-      #- name: Upload file to Nexus
-      #  uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
-       # with:
-      #    serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
-      #    username: ${{ secrets.NEXUS_USERNAME }}
-       #   password: ${{ secrets.NEXUS_PASSWORD }}
-       #   repository: maven-snapshots      
-       #   format: maven          
-       #   coordinates: groupId=com.javaproject artifactId=database_service_project version=0.0.5-SNAPSHOT packaging=jar  
-       #   assets: target/database_service_project-0.0.5-SNAPSHOT.jar 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maven-app
+          path: target/database_service_project-0.0.5-SNAPSHOT.jar
+          retention-days: 30 
 
   docker-build-scan-push:
     name: docker-build-scan-push
@@ -153,10 +148,11 @@ jobs:
       #    exit-code: 1
       #    severity: CRITICAL,HIGH
        
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/ecr-power-user-github-actions
+          aws-access-key-id: ${{ secrets.AWS_USER_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_USER_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       # Login to ECR

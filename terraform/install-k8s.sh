@@ -81,3 +81,8 @@ sudo sed -i '/^#net\.ipv4\.ip_forward=1/s/^#//' /etc/sysctl.conf
 # Apply the changes to sysctl.conf
 # Any changes made to sysctl configuration files take immediate effect without requiring a reboot
 sudo sysctl -p
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip
+unzip awscliv2.zip
+sudo ./aws/install

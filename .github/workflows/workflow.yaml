@@ -185,7 +185,7 @@ jobs:
 
       - name: update deployment file
         run: |
-          sed -i "s|image: .*|image: thumama610/maven-app:${{ github.sha }}|g" deployment-service.yaml
+          sed -i "s|image: .*|image: ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/thumama610/maven-app:${{ github.sha }}|g" deployment-service.yaml
 
       - name: inject k8s files into the server
         run: |

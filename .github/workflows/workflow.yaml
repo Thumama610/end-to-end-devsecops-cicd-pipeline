@@ -175,3 +175,34 @@ jobs:
         run: |
           docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/thumama610/maven-app:${{ github.sha }}
 
+  modify-manifest-and-copy-to-the-server:
+    name: modify-manifest-and-copy-to-the-server
+    runs-on: ubuntu-24.04
+    needs: docker-build-scan-push
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v4
+
+      - name: update deployment file
+        run: |
+          sed -i "s|image: .*|image: thumama610/maven-app:${{ github.sha }}|g" deployment-service.yaml
+
+      - name: inject k8s files into the server
+        run: |
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > my-key.pem
+          sudo chmod 400 my-key.pem
+          scp -o StrictHostKeyChecking=no -i my-key.pem deployment-service.yaml ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }}:~
+
+  ssh-and-apply-to-k8s:
+    name: ssh-and-apply-changes
+    runs-on: ubuntu-24.04
+    needs: modify-manifest-and-copy-to-the-server
+    steps:
+      - name: Execute remote SSH commands using SSH key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_IP_ADDRESS }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f deployment-service.yaml

@@ -12,9 +12,11 @@ spec:
       labels:
         app: boardgame
     spec:
+      imagePullSecrets:
+        - name: ecr-secret
       containers:
         - name: boardgame
-          image: thumama610/maven-app:latest # Image that will be used to containers in the cluster
+          image: nginx ## will be replced 
           imagePullPolicy: Always
           ports:
             - containerPort: 8080 # The port that the container is running on in the cluster
@@ -25,7 +27,7 @@ spec:
 apiVersion: v1 # Kubernetes API version
 kind: Service # Kubernetes resource kind we are creating
 metadata: # Metadata of the resource kind we are creating
-  name: boardgame-ssvc
+  name: boardgame-svc
 spec:
   selector:
     app: boardgame

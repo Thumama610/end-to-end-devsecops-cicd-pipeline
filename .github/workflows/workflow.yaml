@@ -141,7 +141,7 @@ jobs:
           push: false
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@v0.24.0
         with:
           image-ref: thumama610/maven-app:${{ github.sha }}
           format: table

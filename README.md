@@ -150,6 +150,31 @@ This project demonstrates a complete end-to-end DevSecOps pipeline that automate
     Add Monitoring (Prometheus + Grafana)
     Use ArgoCD (GitOps)
 
+# the app: 
+<img width="1920" height="1039" alt="Screenshot (160) new" src="https://github.com/user-attachments/assets/3db89a8b-2a6a-467b-beb2-da2701d59589" />
+<img width="1920" height="1039" alt="Screenshot (160) new" src="https://github.com/user-attachments/assets/3db89a8b-2a6a-467b-beb2-da2701d59589" />
+
+# IAM role to attach to the ec2 instances:
+<img width="1920" height="1039" alt="Screenshot (162) new" src="https://github.com/user-attachments/assets/ffeaef10-0895-4a4a-9a28-b7a18b949877" />
+<img width="1920" height="1039" alt="Screenshot (162) new" src="https://github.com/user-attachments/assets/ffeaef10-0895-4a4a-9a28-b7a18b949877" />
+
+# ec2 instances ports:
+<img width="1920" height="1038" alt="Screenshot (163) new" src="https://github.com/user-attachments/assets/73ebe285-212a-40f2-8e07-46a4db459108" />
+<img width="1920" height="1038" alt="Screenshot (163) new" src="https://github.com/user-attachments/assets/73ebe285-212a-40f2-8e07-46a4db459108" />
+
+# ecr:
+<img width="1920" height="1039" alt="Screenshot (164) new" src="https://github.com/user-attachments/assets/196aa93f-aba6-4020-9bba-ba7b1e2381f9" />
+<img width="1920" height="1039" alt="Screenshot (164) new" src="https://github.com/user-attachments/assets/196aa93f-aba6-4020-9bba-ba7b1e2381f9" />
+
+# nodes:
+<img width="1920" height="1042" alt="Screenshot (165) new" src="https://github.com/user-attachments/assets/8e74e913-a7da-40e6-97f1-b799cc97bdc8" />
+<img width="1920" height="1042" alt="Screenshot (165) new" src="https://github.com/user-attachments/assets/8e74e913-a7da-40e6-97f1-b799cc97bdc8" />
+
+# services:
+<img width="1920" height="1041" alt="Screenshot (166) new" src="https://github.com/user-attachments/assets/189f2bd6-966c-4ca3-90cf-082de541d5ff" />
+<img width="1920" height="1041" alt="Screenshot (166) new" src="https://github.com/user-attachments/assets/189f2bd6-966c-4ca3-90cf-082de541d5ff" />
+
+
 # 👨‍💻 Author
 
       Thumama Alrawwad

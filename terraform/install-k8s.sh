@@ -87,9 +87,3 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 sudo apt install unzip
 unzip awscliv2.zip
 sudo ./aws/install
-
-#nerdcli to use it to login to ecr
-VERSION=$(curl -s https://api.github.com/repos/containerd/nerdctl/releases/latest | grep tag_name | cut -d '"' -f 4)
-wget https://github.com/containerd/nerdctl/releases/download/$${VERSION}/nerdctl-$${VERSION#v}-linux-amd64.tar.gz
-tar -xvf nerdctl-*-linux-amd64.tar.gz
-sudo mv nerdctl /usr/local/bin/

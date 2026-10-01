@@ -96,7 +96,7 @@ This project demonstrates a complete end-to-end DevSecOps pipeline that automate
     5. 📦 Artifact Build
     Generate .jar file
     Upload artifact
-    6. 🐳 Docker مراحل
+    6. 🐳 Docker steps
     Build image
     Scan image with Trivy
     Push to AWS ECR
